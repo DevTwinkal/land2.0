@@ -1,0 +1,692 @@
+:root {
+    --primary: #2563eb;
+    --primary-light: #3b82f6;
+    --secondary: #64748b;
+    --light: #f8fafc;
+    --dark: #1e293b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --border: #e2e8f0;
+    --shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+body {
+    background-color: #f8fafc;
+    color: var(--dark);
+}
+
+/* Header styles */
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+    background-color: white;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    background-color: var(--primary);
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.search-container {
+    display: flex;
+    max-width: 500px;
+    width: 40%;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.search-container input {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border: none;
+    outline: none;
+}
+
+.search-button {
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--secondary);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notifications {
+    cursor: pointer;
+    color: var(--secondary);
+}
+
+.avatar {
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--secondary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Main container styles */
+.main-container {
+    display: grid;
+    grid-template-columns: 200px 1fr 350px;
+    height: calc(100vh - 3.5rem);
+    overflow: hidden;
+}
+
+/* Sidebar styles */
+.sidebar {
+    background-color: white;
+    border-right: 1px solid var(--border);
+    padding: 1rem 0;
+}
+
+.nav-menu {
+    list-style: none;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: var(--secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-item.active {
+    color: var(--primary);
+    background-color: #f1f5f9;
+    border-left: 3px solid var(--primary);
+}
+
+.nav-item:hover:not(.active) {
+    background-color: #f8fafc;
+}
+
+/* Content area styles */
+.content-area {
+    display: grid;
+    grid-template-columns: 1fr;
+    position: relative;
+}
+
+.property-selection {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 10;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 1rem;
+    max-width: 250px;
+}
+
+.selected-property h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.selected-property p {
+    color: var(--secondary);
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.view-details-btn {
+    margin-top: 0.75rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+}
+
+.view-details-btn:hover {
+    background-color: var(--primary-light);
+}
+
+/* Map container styles */
+.map-container {
+    width: 100%;
+    height: 100%;
+}
+
+.map {
+    width: 100%;
+    height: 100%;
+}
+
+/* Property details panel */
+.property-details {
+    padding: 1.5rem;
+    overflow-y: auto;
+    border-left: 1px solid var(--border);
+    background-color: white;
+}
+
+.property-details h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.details-description {
+    color: var(--secondary);
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.property-id-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.property-id {
+    font-size: 0.875rem;
+    color: var(--secondary);
+}
+
+.status-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.status-badge.verified {
+    background-color: #ecfdf5;
+    color: var(--success);
+}
+
+.property-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.property-address {
+    color: var(--secondary);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.property-metadata {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.metadata-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.metadata-item .label {
+    font-size: 0.75rem;
+    color: var(--secondary);
+}
+
+.metadata-item .value {
+    font-weight: 500;
+}
+
+.section-divider {
+    height: 1px;
+    background-color: var(--border);
+    margin: 1.25rem 0;
+}
+
+.owner-section h4,
+.verification-section h4,
+.documents-section h4 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.owner-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.owner-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: var(--secondary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.owner-name {
+    font-weight: 500;
+}
+
+.owner-since {
+    font-size: 0.75rem;
+    color: var(--secondary);
+}
+
+.hash-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.hash-type {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.375rem;
+    background-color: #f1f5f9;
+    border-radius: 4px;
+    color: var(--secondary);
+}
+
+.hash-value {
+    font-family: monospace;
+    font-size: 0.75rem;
+    background-color: #f8fafc;
+    padding: 0.5rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    color: var(--secondary);
+}
+
+.document-list {
+    list-style: none;
+}
+
+.document-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.document-item:last-child {
+    border-bottom: none;
+}
+
+.document-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.document-icon {
+    width: 2rem;
+    height: 2rem;
+    background-color: #eff6ff;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+}
+
+.document-name {
+    font-weight: 500;
+}
+
+.document-date {
+    font-size: 0.75rem;
+    color: var(--secondary);
+}
+
+.view-btn {
+    padding: 0.375rem 0.75rem;
+    background-color: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--secondary);
+    cursor: pointer;
+    font-size: 0.75rem;
+}
+
+.upload-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.625rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.upload-btn:hover {
+    background-color: var(--primary-light);
+}
+
+/* Leaflet specific styles */
+.leaflet-control-container .leaflet-top.leaflet-right {
+    margin-top: 60px;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: 8px;
+}
+
+.leaflet-popup-content {
+    margin: 12px 16px;
+    line-height: 1.5;
+}
+
+/* Parcel styles on map */
+.verified-parcel {
+    stroke: var(--success);
+    stroke-width: 2;
+    stroke-opacity: 0.8;
+    fill: var(--success);
+    fill-opacity: 0.2;
+}
+
+.pending-parcel {
+    stroke: var(--warning);
+    stroke-width: 2;
+    stroke-opacity: 0.8;
+    fill: var(--warning);
+    fill-opacity: 0.2;
+}
+
+.disputed-parcel {
+    stroke: var(--danger);
+    stroke-width: 2;
+    stroke-opacity: 0.8;
+    fill: var(--danger);
+    fill-opacity: 0.2;
+}
+
+.selected-parcel {
+    stroke: var(--primary);
+    stroke-width: 3;
+    stroke-opacity: 1;
+    fill: var(--primary);
+    fill-opacity: 0.3;
+}
+
+/* Authentication styles */
+#auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background-color: #f8fafc;
+}
+
+.auth-form {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-form h2 {
+    margin-bottom: 1.5rem;
+    color: var(--dark);
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--secondary);
+    font-size: 0.875rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.625rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.auth-form button {
+    width: 100%;
+    padding: 0.625rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.auth-form p {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+}
+
+.auth-form a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+/* Page styles */
+.page {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.page.active {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--secondary);
+}
+
+.add-property-btn {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+/* Additional styles for status badges */
+.status-badge.pending {
+    background-color: #fff7ed;
+    color: var(--warning);
+}
+
+.status-badge.disputed {
+    background-color: #fee2e2;
+    color: var(--danger);
+}
+
+/* Logout button */
+#logout-btn {
+    padding: 0.375rem 0.75rem;
+    background-color: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--secondary);
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+}
+
+#logout-btn:hover {
+    background-color: #f1f5f9;
+}
+
+/* Form validation styles */
+.form-group input:invalid {
+    border-color: var(--danger);
+}
+
+.form-error {
+    color: var(--danger);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+/* Loading state styles */
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loading-spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -1rem;
+    margin-left: -1rem;
+    z-index: 1001;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 1024px) {
+    .main-container {
+        grid-template-columns: 180px 1fr 300px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .main-container {
+        grid-template-columns: 60px 1fr;
+    }
+    
+    .property-details {
+        position: fixed;
+        right: 0;
+        top: 3.5rem;
+        bottom: 0;
+        width: 300px;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        z-index: 900;
+    }
+    
+    .property-details.active {
+        transform: translateX(0);
+    }
+    
+    .nav-item span {
+        display: none;
+    }
+    
+    .search-container {
+        width: 60%;
+    }
+}
