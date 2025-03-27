@@ -34,14 +34,15 @@ git clone https://github.com/yourusername/land-record-management.git
 cd land-record-management
 
 # Install dependencies
-npm install
+pip install
 
 # Set up environment variables
 cp .env.example .env
 # Edit the .env file with your configuration
 
 # Start the development server
-npm run dev
+python run.py -> Backend
+python -m http.server 5500
 ```
 
 ## 🚀 Usage
