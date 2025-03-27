@@ -15,8 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (token) {
             try {
+                console.log('Checking authentication with token...');
                 const user = await api.getCurrentUser();
                 if (user) {
+                    console.log('User authenticated:', user);
+                    
                     // User is authenticated, show main content
                     authContainer.style.display = 'none';
                     mainContainer.style.display = 'grid';
@@ -27,8 +30,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     avatar.textContent = getInitials(user.full_name);
                     
                     // Load land records
-                    initMap();
-                    loadLandRecords();
+                    console.log('Initializing map');
+                    if (typeof initMap === 'function') {
+                        initMap();
+                        // Add a small delay before loading land records to ensure map is fully initialized
+                        setTimeout(() => {
+                            loadLandRecords();
+                        }, 100);
+                    } else {
+                        console.error('initMap function not found');
+                    }
+                    
                     return;
                 }
             } catch (error) {
@@ -50,12 +62,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Logging in...';
+        submitBtn.disabled = true;
+        
         try {
+            console.log('Attempting login...');
             const response = await api.login(username, password);
+            console.log('Login successful, token received');
             localStorage.setItem('token', response.access_token);
             checkAuth();
         } catch (error) {
-            alert(error.message || 'Login failed');
+            console.error('Login failed:', error);
+            alert(error.message || 'Login failed. Please check your credentials and try again.');
+        } finally {
+            // Reset button
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         }
     });
     
@@ -71,14 +96,27 @@ document.addEventListener('DOMContentLoaded', function() {
             aadhaar_number: document.getElementById('reg-aadhaar').value
         };
         
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Registering...';
+        submitBtn.disabled = true;
+        
         try {
+            console.log('Attempting registration...');
             await api.register(userData);
+            console.log('Registration successful');
             alert('Registration successful! Please login.');
             // Show login form
             registerFormContainer.style.display = 'none';
-            loginForm.style.display = 'block';
+            loginForm.closest('.auth-form').style.display = 'block';
         } catch (error) {
-            alert(error.message || 'Registration failed');
+            console.error('Registration failed:', error);
+            alert(error.message || 'Registration failed. Please check your information and try again.');
+        } finally {
+            // Reset button
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         }
     });
     

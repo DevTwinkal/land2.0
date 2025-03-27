@@ -3,11 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Land Records</title>
+    <meta name="description" content="Digital Land Records System - Secure management and verification of land records">
+    <meta name="author" content="Digital Land Records System">
+    <title>Digital Land Records System</title>
+    <!-- Core stylesheets -->
     <link rel="stylesheet" href="src/assets/css/styles.css">
+    <link rel="stylesheet" href="src/assets/css/dashboard.css">
+    <link rel="stylesheet" href="src/assets/css/notifications.css">
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <!-- Add favicon to prevent 404 error -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+    <!-- Favicon -->
     <link rel="icon" href="data:,">
 </head>
 <body>
@@ -18,11 +23,11 @@
         </div>
         <div class="search-container">
             <input type="text" placeholder="Search property by ID, owner, or address...">
-            <button class="search-button">🔍</button>
+            <button class="search-button" aria-label="Search">🔍</button>
         </div>
         <div class="user-profile">
-            <div class="notifications">🔔</div>
-            <div class="avatar">AK</div>
+            <div class="notifications" title="Notifications">🔔</div>
+            <div class="avatar" title="User profile">AK</div>
             <button id="logout-btn" style="display: none;">Logout</button>
         </div>
     </header>
@@ -33,11 +38,11 @@
             <form id="login-form">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
+                    <input type="text" id="username" name="username" required autocomplete="username">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
                 </div>
                 <button type="submit">Login</button>
             </form>
@@ -49,23 +54,23 @@
             <form id="register-form">
                 <div class="form-group">
                     <label for="reg-username">Username</label>
-                    <input type="text" id="reg-username" name="username" required>
+                    <input type="text" id="reg-username" name="username" required autocomplete="username">
                 </div>
                 <div class="form-group">
                     <label for="reg-email">Email</label>
-                    <input type="email" id="reg-email" name="email" required>
+                    <input type="email" id="reg-email" name="email" required autocomplete="email">
                 </div>
                 <div class="form-group">
                     <label for="reg-full-name">Full Name</label>
-                    <input type="text" id="reg-full-name" name="full_name" required>
+                    <input type="text" id="reg-full-name" name="full_name" required autocomplete="name">
                 </div>
                 <div class="form-group">
                     <label for="reg-password">Password</label>
-                    <input type="password" id="reg-password" name="password" required>
+                    <input type="password" id="reg-password" name="password" required autocomplete="new-password">
                 </div>
                 <div class="form-group">
                     <label for="reg-aadhaar">Aadhaar Number</label>
-                    <input type="text" id="reg-aadhaar" name="aadhaar_number" required>
+                    <input type="text" id="reg-aadhaar" name="aadhaar_number" required pattern="[0-9]{12}" title="12-digit Aadhaar number">
                 </div>
                 <button type="submit">Register</button>
             </form>
@@ -77,32 +82,54 @@
         <nav class="sidebar">
             <ul class="nav-menu">
                 <li class="nav-item active" data-page="land-records">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.481 31.481 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
-                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                    </svg>
-                    Land Records
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <span>Land Records</span>
                 </li>
                 <li class="nav-item" data-page="documents">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
-                        <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-                    </svg>
-                    Documents
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <span>Documents</span>
                 </li>
                 <li class="nav-item" data-page="mutations">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
-                        <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
-                        <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>
-                    </svg>
-                    Mutations
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <span>Mutations</span>
                 </li>
                 <li class="nav-item" data-page="verification">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 .95 14.61 4h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.379l.5 2A.5.5 0 0 1 15.5 17H.5a.5.5 0 0 1-.485-.621l.5-2A.5.5 0 0 1 1 14V7H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 4h.89L8 .95zM3.776 4h8.447L8 2.05 3.776 4zM2 7v7h1V7H2zm2 0v7h2.5V7H4zm3.5 0v7h1V7h-1zm2 0v7H12V7H9.5zM13 7v7h1V7h-1zm2-1V5H1v1h14zm-.39 9H1.39l-.25 1h13.72l-.25-1z"/>
-                    </svg>
-                    Verification
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-landmark">
+                            <rect x="3" y="14" width="18" height="8" rx="1"></rect>
+                            <line x1="12" y1="2" x2="12" y2="14"></line>
+                            <polyline points="4 14 12 6 20 14"></polyline>
+                        </svg>
+                    </div>
+                    <span>Verification</span>
+                </li>
+                <li class="nav-item" data-page="reports">
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                    </div>
+                    <span>Reports</span>
                 </li>
             </ul>
         </nav>
@@ -188,23 +215,60 @@
                 </div>
             </div>
 
-            <!-- Other pages will be added here -->
+            <!-- Documents page -->
             <div id="documents-page" class="page">
                 <h2>Documents Management</h2>
                 <p>View and manage all your property documents</p>
                 <div id="documents-list-container"></div>
             </div>
 
+            <!-- Mutations page -->
             <div id="mutations-page" class="page">
                 <h2>Property Mutations</h2>
                 <p>Transfer property ownership or track mutation status</p>
                 <div id="mutations-list-container"></div>
             </div>
 
+            <!-- Verification page -->
             <div id="verification-page" class="page">
                 <h2>Verification Portal</h2>
                 <p>Verify property documents and ownership</p>
                 <div id="verification-container"></div>
+            </div>
+            
+            <!-- Reports page -->
+            <div id="reports-page" class="page">
+                <h2>Reports & Analytics</h2>
+                <p>View reports and analytics about your properties</p>
+                <div id="reports-container">
+                    <div class="reports-grid">
+                        <!-- Report cards will be loaded here -->
+                        <div class="report-card">
+                            <h3>Property Summary</h3>
+                            <div class="report-data" id="property-summary-data">
+                                <div class="loading-spinner"></div>
+                            </div>
+                        </div>
+                        <div class="report-card">
+                            <h3>Document Analytics</h3>
+                            <div class="report-data" id="document-analytics-data">
+                                <div class="loading-spinner"></div>
+                            </div>
+                        </div>
+                        <div class="report-card">
+                            <h3>Transaction History</h3>
+                            <div class="report-data" id="transaction-history-data">
+                                <div class="loading-spinner"></div>
+                            </div>
+                        </div>
+                        <div class="report-card">
+                            <h3>Verification Activity</h3>
+                            <div class="report-data" id="verification-activity-data">
+                                <div class="loading-spinner"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -212,7 +276,7 @@
     <!-- Modal for adding new property -->
     <div id="add-property-modal" class="modal">
         <div class="modal-content">
-            <span class="close-btn">&times;</span>
+            <span class="close-btn" aria-label="Close">&times;</span>
             <h2>Add New Property</h2>
             <form id="add-property-form">
                 <div class="form-group">
@@ -221,7 +285,7 @@
                 </div>
                 <div class="form-group">
                     <label for="area-sqft">Area (sq.ft)</label>
-                    <input type="number" id="area-sqft" name="area_sqft" required>
+                    <input type="number" id="area-sqft" name="area_sqft" min="1" step="0.01" required>
                 </div>
                 <div class="form-group">
                     <label for="survey-number">Survey Number</label>
@@ -229,13 +293,16 @@
                 </div>
                 <div class="form-group">
                     <label for="geo-latitude">Latitude</label>
-                    <input type="number" id="geo-latitude" name="geo_latitude" step="0.000001">
+                    <input type="number" id="geo-latitude" name="geo_latitude" step="0.000001" min="-90" max="90">
                 </div>
                 <div class="form-group">
                     <label for="geo-longitude">Longitude</label>
-                    <input type="number" id="geo-longitude" name="geo_longitude" step="0.000001">
+                    <input type="number" id="geo-longitude" name="geo_longitude" step="0.000001" min="-180" max="180">
                 </div>
-                <button type="submit">Add Property</button>
+                <div class="form-actions">
+                    <button type="button" class="secondary-btn modal-cancel">Cancel</button>
+                    <button type="submit" class="primary-btn">Add Property</button>
+                </div>
             </form>
         </div>
     </div>
@@ -243,7 +310,7 @@
     <!-- Modal for uploading documents -->
     <div id="upload-document-modal" class="modal">
         <div class="modal-content">
-            <span class="close-btn">&times;</span>
+            <span class="close-btn" aria-label="Close">&times;</span>
             <h2>Upload Document</h2>
             <form id="upload-document-form">
                 <input type="hidden" id="document-land-id" name="land_id">
@@ -254,38 +321,82 @@
                         <option value="sale_deed">Sale Deed</option>
                         <option value="property_tax">Property Tax Receipt</option>
                         <option value="survey_map">Survey Map</option>
+                        <option value="land_title">Land Title</option>
+                        <option value="mutation_certificate">Mutation Certificate</option>
+                        <option value="utility_bill">Utility Bill</option>
+                        <option value="tenancy_agreement">Tenancy Agreement</option>
                         <option value="other">Other</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="document-file">Document File</label>
-                    <input type="file" id="document-file" name="file" required>
+                    <input type="file" id="document-file" name="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+                    <small class="form-hint">Accepted formats: PDF, JPG, PNG, DOC, DOCX (Max 10MB)</small>
                 </div>
-                <button type="submit">Upload Document</button>
+                <div class="form-group">
+                    <label for="document-description">Description (Optional)</label>
+                    <textarea id="document-description" name="description" rows="2" maxlength="200"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="secondary-btn modal-cancel">Cancel</button>
+                    <button type="submit" class="primary-btn">Upload Document</button>
+                </div>
             </form>
+        </div>
+    </div>
+    
+    <!-- Confirmation dialog -->
+    <div id="confirmation-dialog" class="modal">
+        <div class="modal-content confirmation-content">
+            <h2 id="confirmation-title">Confirm Action</h2>
+            <p id="confirmation-message">Are you sure you want to proceed with this action?</p>
+            <div class="confirmation-actions">
+                <button id="confirmation-cancel" class="secondary-btn">Cancel</button>
+                <button id="confirmation-confirm" class="primary-btn">Confirm</button>
+            </div>
         </div>
     </div>
 
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
     
     <!-- Axios for API calls -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Charts and data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     
     <!-- Application JS -->
     <script src="src/assets/js/api.js"></script>
     <script src="src/assets/js/auth.js"></script>
     <script src="src/assets/js/map.js"></script>
     <script src="src/assets/js/app.js"></script>
+    <script src="src/assets/js/documents.js"></script>
+    <script src="src/assets/js/mutations.js"></script>
+    <script src="src/assets/js/verification.js"></script>
+    <script src="src/assets/js/reports.js"></script>
+    <script src="src/assets/js/main.js"></script>
     
     <!-- Initialize app with debugging -->
     <script>
         window.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded, initializing application...');
             try {
-                console.log('Check if auth module is loaded:', typeof checkAuth === 'function');
-                console.log('Check if API module is loaded:', typeof api === 'object');
-                console.log('Check if map module is loaded:', typeof initMap === 'function');
+                // Initialize main application
+                if (typeof initApp === 'function') {
+                    initApp();
+                }
+                
+                // Log loaded modules
+                console.log('Auth module loaded:', typeof checkAuth === 'function');
+                console.log('API module loaded:', typeof api === 'object');
+                console.log('Map module loaded:', typeof initMap === 'function');
+                
+                // Check for mobile devices
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (isMobile) {
+                    document.body.classList.add('mobile-device');
+                }
             } catch (e) {
                 console.error('Error during initialization:', e);
             }

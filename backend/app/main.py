@@ -7,7 +7,7 @@ from .models.models import Base
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
-# Create FastAPI app - this "app" variable is what's missing
+# Create FastAPI app
 app = FastAPI(
     title="Digital Land Records API",
     description="API for managing digital land records with tamper-proof verification",
@@ -18,7 +18,10 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:8080", 
-    "http://127.0.0.1:5500"
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",  # Added for development
+    "http://127.0.0.1:8000",  # Added for development
+    "*"                       # Allow all origins for testing
 ]
 
 app.add_middleware(

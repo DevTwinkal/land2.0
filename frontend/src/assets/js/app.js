@@ -1,121 +1,149 @@
-// Main application functionality
+// Auth related functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Navigation
-    const navItems = document.querySelectorAll('.nav-item');
-    const pages = document.querySelectorAll('.page');
+    const authContainer = document.getElementById('auth-container');
+    const mainContainer = document.getElementById('main-container');
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const registerLink = document.getElementById('register-link');
+    const loginLink = document.getElementById('login-link');
+    const logoutBtn = document.getElementById('logout-btn');
+    const registerFormContainer = document.getElementById('register-form-container');
     
-    navItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const pageName = this.getAttribute('data-page');
-            
-            // Update active nav item
-            navItems.forEach(navItem => navItem.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Show selected page
-            pages.forEach(page => {
-                if (page.id === `${pageName}-page`) {
-                    page.classList.add('active');
-                } else {
-                    page.classList.remove('active');
+    // Check if user is already logged in
+    const checkAuth = async () => {
+        const token = localStorage.getItem('token');
+        
+        if (token) {
+            try {
+                console.log('Checking authentication with token...');
+                const user = await api.getCurrentUser();
+                if (user) {
+                    console.log('User authenticated:', user);
+                    
+                    // User is authenticated, show main content
+                    authContainer.style.display = 'none';
+                    mainContainer.style.display = 'grid';
+                    logoutBtn.style.display = 'block';
+                    
+                    // Update UI with user info
+                    const avatar = document.querySelector('.avatar');
+                    avatar.textContent = getInitials(user.full_name);
+                    
+                    // Load land records
+                    console.log('Initializing map');
+                    if (typeof initMap === 'function') {
+                        initMap();
+                        // Add a small delay before loading land records to ensure map is fully initialized
+                        setTimeout(() => {
+                            loadLandRecords();
+                        }, 100);
+                    } else {
+                        console.error('initMap function not found');
+                    }
+                    
+                    return;
                 }
-            });
-        });
-    });
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                // Clear invalid token
+                localStorage.removeItem('token');
+            }
+        }
+        
+        // User is not authenticated, show login form
+        authContainer.style.display = 'flex';
+        mainContainer.style.display = 'none';
+    };
     
-    // Add property modal
-    const addPropertyBtn = document.querySelector('.add-property-btn');
-    const addPropertyModal = document.getElementById('add-property-modal');
-    const addPropertyForm = document.getElementById('add-property-form');
-    const closeAddPropertyBtn = addPropertyModal.querySelector('.close-btn');
-    
-    addPropertyBtn.addEventListener('click', function() {
-        addPropertyModal.style.display = 'flex';
-    });
-    
-    closeAddPropertyBtn.addEventListener('click', function() {
-        addPropertyModal.style.display = 'none';
-    });
-    
-    addPropertyForm.addEventListener('submit', async function(e) {
+    // Handle login form submission
+    loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        const landRecordData = {
-            property_address: document.getElementById('property-address-input').value,
-            area_sqft: parseFloat(document.getElementById('area-sqft').value),
-            survey_number: document.getElementById('survey-number').value,
-            geo_latitude: document.getElementById('geo-latitude').value ? parseFloat(document.getElementById('geo-latitude').value) : null,
-            geo_longitude: document.getElementById('geo-longitude').value ? parseFloat(document.getElementById('geo-longitude').value) : null
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Logging in...';
+        submitBtn.disabled = true;
+        
+        try {
+            console.log('Attempting login...');
+            const response = await api.login(username, password);
+            console.log('Login successful, token received');
+            localStorage.setItem('token', response.access_token);
+            checkAuth();
+        } catch (error) {
+            console.error('Login failed:', error);
+            alert(error.message || 'Login failed. Please check your credentials and try again.');
+        } finally {
+            // Reset button
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+    
+    // Handle register form submission
+    registerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const userData = {
+            username: document.getElementById('reg-username').value,
+            email: document.getElementById('reg-email').value,
+            full_name: document.getElementById('reg-full-name').value,
+            password: document.getElementById('reg-password').value,
+            aadhaar_number: document.getElementById('reg-aadhaar').value
         };
         
-        try {
-            await api.createLandRecord(landRecordData);
-            alert('Property added successfully!');
-            addPropertyModal.style.display = 'none';
-            addPropertyForm.reset();
-            
-            // Reload land records
-            loadLandRecords();
-        } catch (error) {
-            alert(error.message || 'Failed to add property');
-        }
-    });
-    
-    // Upload document modal
-    const uploadDocumentBtn = document.getElementById('upload-document-btn');
-    const uploadDocumentModal = document.getElementById('upload-document-modal');
-    const uploadDocumentForm = document.getElementById('upload-document-form');
-    const closeUploadDocumentBtn = uploadDocumentModal.querySelector('.close-btn');
-    
-    uploadDocumentBtn.addEventListener('click', function() {
-        if (!selectedParcel) {
-            alert('Please select a property first');
-            return;
-        }
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Registering...';
+        submitBtn.disabled = true;
         
-        document.getElementById('document-land-id').value = selectedParcel.properties.id;
-        uploadDocumentModal.style.display = 'flex';
+        try {
+            console.log('Attempting registration...');
+            await api.register(userData);
+            console.log('Registration successful');
+            alert('Registration successful! Please login.');
+            // Show login form
+            registerFormContainer.style.display = 'none';
+            loginForm.closest('.auth-form').style.display = 'block';
+        } catch (error) {
+            console.error('Registration failed:', error);
+            alert(error.message || 'Registration failed. Please check your information and try again.');
+        } finally {
+            // Reset button
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
     });
     
-    closeUploadDocumentBtn.addEventListener('click', function() {
-        uploadDocumentModal.style.display = 'none';
-    });
-    
-    uploadDocumentForm.addEventListener('submit', async function(e) {
+    // Toggle between login and register forms
+    registerLink.addEventListener('click', function(e) {
         e.preventDefault();
-        
-        const landId = document.getElementById('document-land-id').value;
-        const documentType = document.getElementById('document-type').value;
-        const file = document.getElementById('document-file').files[0];
-        
-        if (!file) {
-            alert('Please select a file');
-            return;
-        }
-        
-        try {
-            await api.uploadDocument(landId, documentType, file);
-            alert('Document uploaded successfully!');
-            uploadDocumentModal.style.display = 'none';
-            uploadDocumentForm.reset();
-            
-            // Refresh property details
-            fetchPropertyDetails(landId);
-        } catch (error) {
-            alert(error.message || 'Failed to upload document');
-        }
+        registerFormContainer.style.display = 'block';
+        loginForm.closest('.auth-form').style.display = 'none';
     });
     
-    // Close modals when clicking outside
-    window.addEventListener('click', function(e) {
-        if (e.target === addPropertyModal) {
-            addPropertyModal.style.display = 'none';
-        }
-        if (e.target === uploadDocumentModal) {
-            uploadDocumentModal.style.display = 'none';
-        }
+    loginLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        registerFormContainer.style.display = 'none';
+        loginForm.closest('.auth-form').style.display = 'block';
     });
+    
+    // Handle logout
+    logoutBtn.addEventListener('click', function() {
+        localStorage.removeItem('token');
+        checkAuth();
+    });
+    
+    // Utility to get initials from name
+    function getInitials(name) {
+        return name.split(' ').map(n => n[0]).join('');
+    }
+    
+    // Check authentication when page loads
+    checkAuth();
 });
-
-// Global variable for selected parcel
-let selectedParcel = null;

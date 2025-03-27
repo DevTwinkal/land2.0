@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, ConfigDict
 from typing import Optional, List
 from datetime import datetime
 
@@ -18,8 +18,7 @@ class UserResponse(UserBase):
     is_admin: bool
     created_at: datetime
     
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Token schemas
 class Token(BaseModel):
@@ -47,8 +46,7 @@ class LandRecordResponse(LandRecordBase):
     created_at: datetime
     updated_at: datetime
     
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Mutation schemas
 class MutationCreate(BaseModel):
@@ -66,8 +64,7 @@ class MutationResponse(BaseModel):
     transaction_id: str
     status: str
     
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Document schemas
 class DocumentCreate(BaseModel):
@@ -82,5 +79,4 @@ class DocumentResponse(BaseModel):
     file_hash: str
     uploaded_at: datetime
     
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
